@@ -27,3 +27,13 @@ def get_exchange_rate(url=API_URL):
 def calculate_ils(amount, rate):
     return (Decimal(amount) * rate).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
+
+def get_money_interval(difficulty, correct_amount):
+    margin = Decimal(5 - difficulty)
+    return correct_amount - margin, correct_amount + margin
+
+
+def is_guess_in_interval(guess, interval):
+    lower, upper = interval
+    return lower <= guess <= upper
+
