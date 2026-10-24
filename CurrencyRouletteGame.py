@@ -37,3 +37,30 @@ def is_guess_in_interval(guess, interval):
     lower, upper = interval
     return lower <= guess <= upper
 
+
+def get_guess_from_user(amount):
+    while True:
+        user_input = input(f"How much is {amount} USD in ILS? ").strip()
+        try:
+            guess = Decimal(user_input)
+        except InvalidOperation:
+            print("Invalid input: please enter a number, for example 36 or 36.50.")
+            continue
+        if not guess.is_finite() or guess < 0:
+            print("Invalid input: please enter a non-negative number.")
+            continue
+        return guess.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def play(difficulty):
+    amount = generate_amount()
+    rate = get_exchange_rate()
+    if rate is None:
+        return None
+    correct_amount = calculate_ils(amount, rate)
+    interval = get_money_interval(difficulty, correct_amount)
+    guess = get_guess_from_user(amount)
+    result = is_guess_in_interval(guess, interval)
+    print(f"The correct value was {correct_amount} ILS (rate: {rate}).")
+    return result
+
