@@ -1,5 +1,9 @@
-from Live import welcome, load_game
+from Live import welcome, main_menu
 
-name = input("Enter your name: ")
-print(welcome(name))
-load_game()
+try:
+    name = input("Enter your name: ")
+    print(welcome(name))
+    main_menu()
+except (KeyboardInterrupt, EOFError):
+    print("\nGoodbye!")
+
