@@ -21,3 +21,20 @@ source venv/Scripts/activate   # Windows (Git Bash)
 pip install -r requirements.txt
 python MainGame.py
 
+```
+
+## Project structure
+| File | Purpose |
+|---|---|
+| `MainGame.py` | Entry point |
+| `Live.py` | Welcome message, main menu, game selection and input validation |
+| `GuessGame.py` | Guess Game logic |
+| `MemoryGame.py` | Memory Game logic |
+| `CurrencyRouletteGame.py` | Currency Roulette logic and exchange-rate API |
+| `requirements.txt` | External Python dependencies |
+
+## Project stages
+- [x] **Part 1** - Foundations: console application with three games
+- [ ] **Part 2** - Scores and web service
+- [ ] **Part 3** - Containers, automation and deployment
+
