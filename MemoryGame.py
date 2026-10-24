@@ -31,3 +31,16 @@ def get_list_from_user(difficulty):
         except ValueError:
             print("Invalid input: please enter whole numbers only, separated by spaces.")
 
+
+def is_list_equal(list_a, list_b):
+    return list_a == list_b
+
+
+def play(difficulty):
+    sequence = generate_sequence(difficulty)
+    display_sequence(sequence)
+    user_list = get_list_from_user(difficulty)
+    result = is_list_equal(sequence, user_list)
+    print("The sequence was: " + " ".join(str(n) for n in sequence))
+    return result
+
