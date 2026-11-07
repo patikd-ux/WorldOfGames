@@ -42,14 +42,14 @@ def get_guess_from_user(amount):
     while True:
         user_input = input(f"How much is {amount} USD in ILS? ").strip()
         try:
-            guess = Decimal(user_input)
+            guess = Decimal(user_input).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
         except InvalidOperation:
             print("Invalid input: please enter a number, for example 36 or 36.50.")
             continue
         if not guess.is_finite() or guess < 0:
             print("Invalid input: please enter a non-negative number.")
             continue
-        return guess.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        return guess
 
 
 def play(difficulty):
