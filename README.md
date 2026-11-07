@@ -15,12 +15,17 @@ Difficulty ranges from 1 (easiest) to 5 (hardest).
 
 ## How to run
 ```bash
-python -m venv venv
+# 1. Create the virtual environment
+py -m venv venv                # Windows
+# python3 -m venv venv         # Linux / macOS
+
+# 2. Activate it
 source venv/Scripts/activate   # Windows (Git Bash)
 # source venv/bin/activate     # Linux / macOS
+
+# 3. Install dependencies and run (inside the venv, "python" works on every OS)
 pip install -r requirements.txt
 python MainGame.py
-
 ```
 
 ## Project structure
