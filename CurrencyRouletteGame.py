@@ -18,7 +18,7 @@ def get_exchange_rate(url=API_URL):
     except (requests.RequestException, ValueError, KeyError, TypeError, InvalidOperation):
         print("Error: could not retrieve the USD to ILS exchange rate. The round is cancelled.")
         return None
-    if rate <= 0:
+    if not rate.is_finite() or rate <= 0:
         print("Error: received an invalid exchange rate. The round is cancelled.")
         return None
     return rate
