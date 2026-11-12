@@ -12,3 +12,5 @@ venv/
 # Score data (created when playing)
 Scores.txt
 
+# PlayerScores
+PlayerScores.json

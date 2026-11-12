@@ -10,6 +10,11 @@ SCORES_FILE_NAME = "Scores.txt"
 SCORES_FILE_PATH = Path(os.environ.get(
     "WOG_SCORES_FILE", Path(__file__).resolve().parent / SCORES_FILE_NAME))
 
+# File that stores each player's score and number of wins (the leaderboard).
+PLAYER_SCORES_FILE_NAME = "PlayerScores.json"
+PLAYER_SCORES_FILE_PATH = Path(os.environ.get(
+    "WOG_PLAYER_SCORES_FILE", Path(__file__).resolve().parent / PLAYER_SCORES_FILE_NAME))
+
 # Returned when reading or writing the score fails.
 # A valid score is always a whole number >= 0, so -1 can never be mistaken for one.
 BAD_RETURN_CODE = -1
