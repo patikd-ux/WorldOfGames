@@ -5,7 +5,7 @@ def main():
     try:
         name = input("Enter your name: ")
         print(welcome(name))
-        main_menu()
+        main_menu(name)
     except (KeyboardInterrupt, EOFError):
         print("\nGoodbye!")
 
