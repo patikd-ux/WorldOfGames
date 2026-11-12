@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Only the files the score service needs
 COPY Utils.py Score.py MainScores.py ./
+COPY templates/ templates/
 
 # Part 2: an initial score file inside the image (Part 3 moves it to external storage)
 RUN echo 0 > /Scores.txt
