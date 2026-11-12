@@ -1,0 +1,6 @@
+# Local play: mount the real score file (written by the console game) over /Scores.txt.
+services:
+  scores:
+    volumes:
+      - ./Scores.txt:/Scores.txt:ro
+
