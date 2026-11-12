@@ -8,3 +8,7 @@ venv/
 # Editor settings
 .vscode/
 .idea/
+
+# Score data (created when playing)
+Scores.txt
+
