@@ -1,0 +1,8 @@
+services:
+  scores:
+    build: .
+    image: patik4790/wog-scores:latest
+    container_name: wog-scores
+    ports:
+      - "8777:5000"
+

@@ -1,0 +1,16 @@
+World of Games - score service (MainScores.py)
+
+What it does:
+  A Flask web service that reads the saved score and shows it at
+  http://localhost:8777. Inside the container the service listens on
+  WOG_SCORES_FILE environment variable in the Dockerfile).
+
+Start with Docker Compose (from the project folder):
+  docker compose up -d --build
+  docker compose ps
+  docker compose down
+
+Direct container run (same result, without Compose):
+  docker run --rm -d -p 8777:5000 --name wog-scores patik4790/wog-scores:latest
+  docker stop wog-scores
+
