@@ -1,0 +1,7 @@
+# Test setup: mount the dedicated test score file over the image's /Scores.txt.
+# Use together with the main file:
+services:
+  scores:
+    volumes:
+      - ./tests/test-score.txt:/Scores.txt:ro
+
