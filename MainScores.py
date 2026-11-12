@@ -1,26 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from Score import read_score
 from Utils import BAD_RETURN_CODE
 
 # Internal port of the score service. Docker maps host port 8777 to it.
 PORT = 5000
-
-SCORE_PAGE = """<!DOCTYPE html>
-<html>
-<head><title>Scores Game</title></head>
-<body>
-<h1>The score is <span id="score">{score}</span></h1>
-</body>
-</html>"""
-
-ERROR_PAGE = """<!DOCTYPE html>
-<html>
-<head><title>Scores Game</title></head>
-<body>
-<h1><span id="score" style="color: red">{error}</span></h1>
-</body>
-</html>"""
 
 app = Flask(__name__)
 
@@ -29,8 +13,8 @@ app = Flask(__name__)
 def score_server():
     score = read_score(missing_is_zero=False)
     if score == BAD_RETURN_CODE:
-        return ERROR_PAGE.format(error="Error: the score is not available."), 500
-    return SCORE_PAGE.format(score=score)
+        return render_template("score.html", error="Error: the score is not available."), 500
+    return render_template("score.html", score=score)
 
 
 if __name__ == "__main__":

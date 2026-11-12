@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scores Game</title>
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --deep: #12335e;
+      --blue: #1e5aa8;
+      --sky: #5fa8ff;
+      --ice: #e6f0ff;
+      --error: #ff4d4f;
+    }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ice);
+      background: radial-gradient(circle at top, var(--blue), var(--deep) 45%, var(--navy));
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      padding: 40px 32px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(95, 168, 255, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+    .eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sky);
+    }
+    h1 { margin-top: 12px; font-size: 1.4rem; font-weight: 600; }
+    #score {
+      display: block;
+      margin-top: 16px;
+      font-size: 4.5rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    #score.error { font-size: 1.3rem; color: var(--error); }
+    .note { margin-top: 20px; font-size: 0.85rem; color: rgba(230, 240, 255, 0.7); }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <p class="eyebrow">World of Games</p>
+    {% if error %}
+    <h1>Score unavailable</h1>
+    <span id="score" class="error">{{ error }}</span>
+    {% else %}
+    <h1>The score is <span id="score">{{ score }}</span></h1>
+    {% endif %}
+    <p class="note">Refresh the page to see the latest score.</p>
+  </main>
+</body>
+</html>
+
