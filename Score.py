@@ -1,11 +1,14 @@
 from Utils import BAD_RETURN_CODE, SCORES_FILE_PATH
 
 
-def read_score():
+def read_score(missing_is_zero=True):
     try:
         text = SCORES_FILE_PATH.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
-        return 0
+        if missing_is_zero:
+            return 0
+        print(f"Error: the score file {SCORES_FILE_PATH} does not exist.")
+        return BAD_RETURN_CODE
     except OSError:
         print(f"Error: could not read the score file {SCORES_FILE_PATH}.")
         return BAD_RETURN_CODE
