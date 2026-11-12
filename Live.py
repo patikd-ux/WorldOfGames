@@ -1,6 +1,8 @@
 import CurrencyRouletteGame
 import GuessGame
 import MemoryGame
+from Score import add_score
+from Utils import BAD_RETURN_CODE
 
 GAMES = {
     1: MemoryGame,
@@ -44,6 +46,9 @@ def load_game():
         print("The round was cancelled due to a technical error. No result was recorded.")
     elif result:
         print("Congratulations, you won!")
+        new_score = add_score(difficulty)
+        if new_score != BAD_RETURN_CODE:
+            print(f"Your total score is now {new_score}.")
     else:
         print("Sorry, you lost. Better luck next time!")
 
