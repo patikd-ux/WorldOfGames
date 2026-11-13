@@ -1,16 +1,30 @@
 World of Games - score service (MainScores.py)
 
 What it does:
-  A Flask web service that reads the saved score and shows it at
-  http://localhost:8777. Inside the container the service listens on
-  WOG_SCORES_FILE environment variable in the Dockerfile).
+  A Flask web service that shows the total score and the player leaderboard at
+  http://localhost:8777. Inside the container the service listens on port 5000,
+  and Docker maps host port 8777 to it.
+
+Files inside the container:
+  /Scores.txt          the total score (path set by WOG_SCORES_FILE in the Dockerfile)
+  /PlayerScores.json   the leaderboard (path set by WOG_PLAYER_SCORES_FILE in the Dockerfile)
 
 Start with Docker Compose (from the project folder):
   docker compose up -d --build
   docker compose ps
   docker compose down
 
+Show your real score and leaderboard (both files must exist - win one round first):
+  docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+  docker compose -f docker-compose.yml -f docker-compose.local.yml down
+
+Browser test (Selenium) with the test score file (100):
+  docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+  python tests/e2e.py
+  docker compose -f docker-compose.yml -f docker-compose.test.yml down
+
 Direct container run (same result, without Compose):
+  docker build -t patik4790/wog-scores:latest .
   docker run --rm -d -p 8777:5000 --name wog-scores patik4790/wog-scores:latest
   docker stop wog-scores
 
