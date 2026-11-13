@@ -25,7 +25,7 @@
     }
     .card {
       width: 100%;
-      max-width: 420px;
+      max-width: 560px;
       padding: 40px 32px;
       text-align: center;
       background: rgba(255, 255, 255, 0.08);
@@ -40,6 +40,13 @@
       color: var(--sky);
     }
     h1 { margin-top: 12px; font-size: 1.4rem; font-weight: 600; }
+    h2 {
+      margin: 32px 0 12px;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sky);
+    }
     #score {
       display: block;
       margin-top: 16px;
@@ -48,7 +55,27 @@
       color: #ffffff;
     }
     #score.error { font-size: 1.3rem; color: var(--error); }
-    .note { margin-top: 20px; font-size: 0.85rem; color: rgba(230, 240, 255, 0.7); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid rgba(95, 168, 255, 0.2); }
+    th {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sky);
+    }
+    td:nth-child(2) { text-align: start; }
+    td:nth-child(3) { font-weight: 700; }
+    tr.last td { background: rgba(95, 168, 255, 0.18); }
+    .tag {
+      margin-inline-start: 6px;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      background: var(--sky);
+      color: var(--navy);
+    }
+    .muted { color: rgba(230, 240, 255, 0.7); font-size: 0.9rem; }
+    .note { margin-top: 24px; font-size: 0.85rem; color: rgba(230, 240, 255, 0.7); }
   </style>
 </head>
 <body>
@@ -59,9 +86,31 @@
     <span id="score" class="error">{{ error }}</span>
     {% else %}
     <h1>The score is <span id="score">{{ score }}</span></h1>
+
+    <h2>Leaderboard</h2>
+    {% if leaderboard is none %}
+    <p class="muted">The leaderboard is not available right now.</p>
+    {% elif not leaderboard.rows %}
+    <p class="muted">No players yet - win a game to appear here.</p>
+    {% else %}
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Player</th><th>Score</th><th>Wins</th></tr>
+      </thead>
+      <tbody>
+        {% for row in leaderboard.rows %}
+        <tr{% if row.name == leaderboard.last_player %} class="last"{% endif %}>
+          <td>{% if row.rank == 1 %}🥇{% elif row.rank == 2 %}🥈{% elif row.rank == 3 %}🥉{% else %}{{ row.rank }}{% endif %}</td>
+          <td>{{ row.name }}{% if row.name == leaderboard.last_player %}<span class="tag">last win</span>{% endif %}</td>
+          <td>{{ row.score }}</td>
+          <td>{{ row.wins }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
     {% endif %}
     <p class="note">Refresh the page to see the latest score.</p>
   </main>
 </body>
 </html>
-

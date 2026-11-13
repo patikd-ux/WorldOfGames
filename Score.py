@@ -96,3 +96,14 @@ def add_score(difficulty, player_name=None):
     if player_name is not None:
         add_player_points(player_name, POINTS_OF_WINNING)
     return new_score
+
+
+def get_leaderboard():
+    data = read_player_scores()
+    if data is None:
+        return None
+    ranking = sorted(data["players"].items(),
+                     key=lambda item: (-item[1]["score"], item[0].lower()))
+    rows = [{"rank": rank, "name": name, "score": stats["score"], "wins": stats["wins"]}
+            for rank, (name, stats) in enumerate(ranking, start=1)]
+    return {"rows": rows, "last_player": data.get("last_player")}
