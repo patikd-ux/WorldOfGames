@@ -30,7 +30,7 @@ def get_number_in_range(prompt, min_value, max_value):
         print(f"Out of range: please enter a number between {min_value} and {max_value}.")
 
 
-def load_game():
+def load_game(player_name=None):
     print("Please choose a game to play:")
     print("1. Memory Game - a sequence of numbers will appear for 0.7 seconds "
           "and you have to guess it back")
@@ -46,7 +46,7 @@ def load_game():
         print("The round was cancelled due to a technical error. No result was recorded.")
     elif result:
         print("Congratulations, you won!")
-        new_score = add_score(difficulty)
+        new_score = add_score(difficulty, player_name)
         if new_score != BAD_RETURN_CODE:
             print(f"Your total score is now {new_score}.")
     else:
@@ -55,15 +55,14 @@ def load_game():
     return result
 
 
-def main_menu():
+def main_menu(player_name=None):
     while True:
         print("\nMain Menu:")
         print("1. Enter Games")
         print("2. Exit")
         choice = get_number_in_range("Enter your choice: ", 1, 2)
         if choice == 1:
-            load_game()
+            load_game(player_name)
         else:
             print("Thank you for playing World of Games. Goodbye!")
             return
-
