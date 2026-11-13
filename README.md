@@ -42,8 +42,9 @@ broken, the page still shows the total and says the leaderboard is not available
 
 ## Requirements
 - Python 3.10+
+- Git
 - Internet connection (for Currency Roulette)
-- Docker Desktop (for the container)
+- Docker Desktop (only for running the score page in a container)
 - Google Chrome (for the browser test; Selenium finds the matching driver itself)
 
 Python dependencies are pinned in `requirements.txt` (`requests`, `Flask`, `selenium` and their dependencies).
@@ -63,37 +64,80 @@ the file is left unchanged. The leaderboard file follows the same rules: missing
 players yet, and a broken file is reported and never overwritten.
 
 ## How to run
+Everything below runs on your own computer: the game runs in your terminal, and the
+score page runs in your browser, either from Python or from a Docker container on your
+computer. Nothing connects to the author's machine, and every copy of the project keeps
+its own scores (the score files are not stored in Git).
+
+### 1. Get the project
 ```bash
-# 1. Create the virtual environment
-py -m venv venv                # Windows
-# python3 -m venv venv         # Linux / macOS
+git clone https://github.com/patikd-ux/WorldOfGames.git
+cd WorldOfGames
+```
 
-# 2. Activate it
-source venv/Scripts/activate   # Windows (Git Bash)
-# source venv/bin/activate     # Linux / macOS
+### 2. Create and activate a virtual environment
+```bash
+py -m venv venv                  # Windows
+# python3 -m venv venv           # Linux / macOS
 
-# 3. Install dependencies and play (inside the venv, "python" works on every OS)
+source venv/Scripts/activate     # Windows (Git Bash)
+# venv\Scripts\Activate.ps1      # Windows (PowerShell)
+# source venv/bin/activate       # Linux / macOS
+```
+The prompt now starts with `(venv)`. Activate the venv again in every new terminal.
+
+### 3. Install the dependencies
+```bash
 pip install -r requirements.txt
+```
+
+### 4. Play
+```bash
 python MainGame.py
 ```
+Enter your name, choose a game and a difficulty from 1 to 5. The first win creates
+`Scores.txt` (the total) and `PlayerScores.json` (the leaderboard) in the project folder,
+and every later win adds to them. **Win at least one round before step 5.**
 
-### Score service on your machine
+### 5. See your score
+Choose one of the two options. Both read the same two files, so after every win,
+refresh the page to see the new total and leaderboard.
+
+**Option A - with Python (no Docker needed)**
+
+In a second terminal, from the project folder, with the venv active:
 ```bash
-python MainScores.py           # then open http://localhost:5000
+python MainScores.py
 ```
+Open http://localhost:5000. Stop the service with `Ctrl+C`.
 
-### Score service in Docker
-```bash
-docker compose up -d --build   # then open http://localhost:8777
-docker compose down
-```
+**Option B - in Docker**
 
-To show your real score and leaderboard in the container, mount them with the local
-override (`Scores.txt` and `PlayerScores.json` must exist first, so win at least one round):
+Start Docker Desktop and wait until it shows that the engine is running. Then:
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+```
+Open http://localhost:8777. The container runs in the background (`-d`), so you can
+keep playing in the same terminal. It mounts your `Scores.txt` and `PlayerScores.json`
+read-only: the page shows them but never changes them.
+
+When you are done, stop and remove the container:
+```bash
 docker compose -f docker-compose.yml -f docker-compose.local.yml down
 ```
+
+> Without `-f docker-compose.local.yml` the container does not see your files: it shows
+> its own built-in score of `0` and "No players yet". That mode is used by the browser test.
+
+### Troubleshooting
+| Problem | Cause | Fix |
+|---|---|---|
+| The container fails to start, or `Scores.txt` / `PlayerScores.json` turned into a folder | Docker was started before the first win, so the files did not exist and Docker created empty folders in their place | Run the `down` command above, delete the two folders (`rm -rf Scores.txt PlayerScores.json` - only when they are folders), win one round, then start again |
+| `error during connect` or `cannot find the file specified` from `docker` | Docker Desktop is not running | Start Docker Desktop, wait for the engine, run the command again |
+| `port is already allocated`, or the page does not open | Another program (or an older `wog-scores` container) is using port 8777 or 5000 | Stop that program, or remove the old container with `docker rm -f wog-scores` |
+| `ModuleNotFoundError` (for example `requests` or `flask`) | The venv is not active in this terminal | Activate it (step 2) and run the command again |
+| `py` or `python` is not recognized | Python is not installed or not on PATH | Install Python 3.10+ and tick "Add python.exe to PATH" in the installer |
+| Currency Roulette cannot get the exchange rate | No internet connection | Connect and try again, or play another game |
 
 ## Browser test
 The test runs against the container, with a dedicated test score file instead of real game scores:
