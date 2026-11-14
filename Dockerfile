@@ -21,5 +21,9 @@ ENV WOG_PLAYER_SCORES_FILE=/PlayerScores.json
 # Internal port of the service (PORT in MainScores.py); mapped to 8777 on the host
 EXPOSE 5000
 
+# Run as a regular user, not root: the service only reads the score files
+RUN useradd --no-create-home wog
+USER wog
+
 CMD ["python", "MainScores.py"]
 
