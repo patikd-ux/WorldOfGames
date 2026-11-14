@@ -11,6 +11,8 @@ venv/
 
 # Score data (created when playing)
 Scores.txt
-
-# PlayerScores
 PlayerScores.json
+
+# Temporary files from manual tests (same rule as .dockerignore)
+tmp-*
+
