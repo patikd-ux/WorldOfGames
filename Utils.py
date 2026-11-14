@@ -25,3 +25,18 @@ def Screen_cleaner():
         os.system("")
     print("\033[H\033[2J\033[3J", end="", flush=True)
 
+
+def get_number_in_range(prompt, min_value, max_value):
+    # Ask until the user enters a whole number from min_value to max_value (inclusive).
+    while True:
+        user_input = input(prompt).strip()
+        try:
+            number = int(user_input)
+        except ValueError:
+            print("Invalid input: please enter a whole number "
+                  f"between {min_value} and {max_value}.")
+            continue
+        if min_value <= number <= max_value:
+            return number
+        print(f"Out of range: please enter a number between {min_value} and {max_value}.")
+

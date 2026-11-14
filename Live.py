@@ -2,7 +2,7 @@ import CurrencyRouletteGame
 import GuessGame
 import MemoryGame
 from Score import add_score
-from Utils import BAD_RETURN_CODE
+from Utils import BAD_RETURN_CODE, get_number_in_range
 
 GAMES = {
     1: MemoryGame,
@@ -14,20 +14,6 @@ GAMES = {
 def welcome(name):
     return (f"Hello {name} and welcome to the World of Games (WoG).\n"
             "Here you can find many cool games to play.")
-
-
-def get_number_in_range(prompt, min_value, max_value):
-    while True:
-        user_input = input(prompt).strip()
-        try:
-            number = int(user_input)
-        except ValueError:
-            print("Invalid input: please enter a whole number "
-                  f"between {min_value} and {max_value}.")
-            continue
-        if min_value <= number <= max_value:
-            return number
-        print(f"Out of range: please enter a number between {min_value} and {max_value}.")
 
 
 def load_game(player_name=None):
@@ -66,3 +52,4 @@ def main_menu(player_name=None):
         else:
             print("Thank you for playing World of Games. Goodbye!")
             return
+
