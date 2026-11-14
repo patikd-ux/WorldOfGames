@@ -32,12 +32,13 @@ broken, the page still shows the total and says the leaderboard is not available
 | `MainGame.py` | Console entry point: asks for the player name and starts the menu |
 | `Live.py` | Welcome message, main menu, game selection; awards points after a win |
 | `GuessGame.py`, `MemoryGame.py`, `CurrencyRouletteGame.py` | Game logic |
-| `Score.py` | Reads and writes the total and the leaderboard; builds the sorted ranking |
+| `Score.py` | Reads and writes the total and the leaderboard (atomic writes); builds the sorted ranking |
 | `Utils.py` | Shared settings (file names and paths, `BAD_RETURN_CODE`) and `Screen_cleaner` |
 | `MainScores.py` | Flask web service that shows the score and the leaderboard (`templates/score.html`) |
-| `Dockerfile`, `docker-compose.yml` | Container image and service for the score page |
+| `Dockerfile`, `docker-compose.yml` | Container image (runs as a regular user, not root) and service for the score page |
 | `docker-compose.test.yml` | Test override: mounts the test score file |
 | `docker-compose.local.yml` | Local override: mounts the real score and leaderboard files |
+| `tests/test_score.py` | Unit tests (pytest) of the scoring rules and the leaderboard |
 | `tests/e2e.py` | Selenium browser test of the score service |
 
 ## Requirements
@@ -47,7 +48,7 @@ broken, the page still shows the total and says the leaderboard is not available
 - Docker Desktop (only for running the score page in a container)
 - Google Chrome (for the browser test; Selenium finds the matching driver itself)
 
-Python dependencies are pinned in `requirements.txt` (`requests`, `Flask`, `selenium` and their dependencies).
+Python dependencies are pinned in `requirements.txt` (`requests`, `Flask`, `selenium`, `pytest` and their dependencies).
 
 ## Configuration
 | Setting | Value | Where |
@@ -139,6 +140,17 @@ docker compose -f docker-compose.yml -f docker-compose.local.yml down
 | `py` or `python` is not recognized | Python is not installed or not on PATH | Install Python 3.10+ and tick "Add python.exe to PATH" in the installer |
 | Currency Roulette cannot get the exchange rate | No internet connection | Connect and try again, or play another game |
 
+## Unit tests
+The scoring rules are checked with pytest, without Docker or a browser:
+```bash
+python -m pytest -v            # from the project folder, with the venv active
+```
+Each test gets its own temporary score and leaderboard files, so the real `Scores.txt`
+and `PlayerScores.json` are never touched. The tests cover the points per difficulty
+(8 to 20), adding to a saved total, a missing file versus an invalid one, a failed write
+that keeps the old score, and the leaderboard ranking, wins and `Guest` name.
+Use `python -m pytest` (not plain `pytest`) so that `import Score` works from `tests/`.
+
 ## Browser test
 The test runs against the container, with a dedicated test score file instead of real game scores:
 ```bash
@@ -157,6 +169,7 @@ checks that it is a whole number from 1 to 1000. Another URL can be passed as an
 | Container (`docker compose up`) | `/Scores.txt` inside the image, starting at `0` | none, so "No players yet" |
 | Container with the local override | your real `Scores.txt`, mounted read-only | your real `PlayerScores.json`, mounted read-only |
 | Container for the browser test | `tests/test-score.txt` (`100`), mounted read-only | none |
+| Unit tests (`python -m pytest`) | a temporary file per test | a temporary file per test |
 
 ## Project stages
 - [x] **Part 1** - Foundations: console application with three games

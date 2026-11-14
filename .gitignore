@@ -18,3 +18,6 @@ tmp-*
 
 # tmp files from leftover crashes
 *.tmp
+
+# pytest cache
+.pytest_cache/
