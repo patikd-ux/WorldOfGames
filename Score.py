@@ -1,6 +1,22 @@
 import json
+import os
 
 from Utils import BAD_RETURN_CODE, PLAYER_SCORES_FILE_PATH, SCORES_FILE_PATH
+
+
+def write_text_atomic(path, text):
+    # Write to a side file first, then swap it in with one atomic step.
+    # The real file always holds the old or the new content, never a half-written one.
+    temp_path = path.with_name(path.name + ".tmp")
+    try:
+        temp_path.write_text(text, encoding="utf-8")
+        os.replace(temp_path, path)
+    except OSError:
+        try:
+            temp_path.unlink(missing_ok=True)
+        except OSError:
+            pass
+        raise
 
 
 def read_score(missing_is_zero=True):
@@ -23,7 +39,7 @@ def read_score(missing_is_zero=True):
 
 def write_score(score):
     try:
-        SCORES_FILE_PATH.write_text(str(score), encoding="utf-8")
+        write_text_atomic(SCORES_FILE_PATH, str(score))
     except OSError:
         print(f"Error: could not save the score to {SCORES_FILE_PATH}. "
               "The points were not recorded.")
@@ -65,8 +81,8 @@ def read_player_scores():
 
 def write_player_scores(data):
     try:
-        PLAYER_SCORES_FILE_PATH.write_text(
-            json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+        write_text_atomic(PLAYER_SCORES_FILE_PATH,
+                          json.dumps(data, indent=2, ensure_ascii=False))
     except OSError:
         print(f"Error: could not save the player scores to {PLAYER_SCORES_FILE_PATH}.")
         return False
@@ -107,3 +123,4 @@ def get_leaderboard():
     rows = [{"rank": rank, "name": name, "score": stats["score"], "wins": stats["wins"]}
             for rank, (name, stats) in enumerate(ranking, start=1)]
     return {"rows": rows, "last_player": data.get("last_player")}
+

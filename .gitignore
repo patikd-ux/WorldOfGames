@@ -16,3 +16,5 @@ PlayerScores.json
 # Temporary files from manual tests (same rule as .dockerignore)
 tmp-*
 
+# tmp files from leftover crashes
+*.tmp
